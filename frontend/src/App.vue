@@ -1,5 +1,6 @@
 <template>
-  <div class="app">
+  <LoginPage v-if="!authenticated" @login="login" />
+  <div v-else class="app">
     <header class="app-header">
       <div class="app-brand">
         <span class="app-logo">Prompt</span>
@@ -87,6 +88,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useAuth } from './composables/useAuth'
+import LoginPage from './components/LoginPage.vue'
 import ActivityBar from './components/ActivityBar.vue'
 import SettingsDropdown from './components/SettingsDropdown.vue'
 import Sidebar from './components/Sidebar.vue'
@@ -95,6 +98,7 @@ import ChatPanel from './components/ChatPanel.vue'
 import VoiceChatPanel from './components/VoiceChatPanel.vue'
 import { fetchPrompts, createPrompt as apiCreate, updatePrompt } from './api/prompts'
 
+const { authenticated, login } = useAuth()
 const STORAGE_KEY = 'prompt-editor-panel-sizes'
 
 const sidebarOpen = ref(true)
