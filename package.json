@@ -1,0 +1,9 @@
+{
+  "name": "prompt-editor",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "backend": "cd backend && source venv/bin/activate && python run.py",
+    "install:all": "cd frontend && npm install"
+  }
+}
