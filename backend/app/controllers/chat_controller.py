@@ -161,10 +161,15 @@ def translate():
         return {"error": "GROQ_API_KEY not configured"}, 500
 
     system_content = (
-        f"Translate the following text to {target_language}. "
+        f"Translate the following prompt/pitch to {target_language}. "
         "Use a casual, conversational tone - like everyday spoken language. "
         "Words that belong to the target language MUST be written in that language's native script "
-        "(e.g. Hindi in Devanagari, not Roman). Keep the same structure and meaning. "
+        "(e.g. Hindi in Devanagari, not Roman). Keep the same structure and meaning.\n\n"
+        "CRITICAL - PRESERVE VARIABLES EXACTLY:\n"
+        "Do NOT translate or change any variable/placeholder parts. Keep them exactly as written. "
+        "Variables include: {{name}}, {{company}}, {{customer}}, [PLACEHOLDER], ${{var}}, "
+        "or any text in double curly braces {{ }}, square brackets [ ], or similar template syntax. "
+        "ONLY translate the pitch/sales content - the actual spoken text. Variables stay unchanged.\n\n"
         "Output ONLY the translated text, nothing else."
     )
 

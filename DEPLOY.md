@@ -23,18 +23,37 @@
 
 ---
 
-## Step 2: Add environment variables
+## Step 2: Add API keys (environment variables)
 
-1. In your Railway project, click on your service
-2. Go to the **Variables** tab
-3. Add these variables:
+Railway injects env vars into your backend at runtime. **Never commit API keys to git.**
 
-| Variable | Description | Where to get it |
-|----------|-------------|-----------------|
-| `ELEVENLABS_API_KEY` | TTS (Listen) | [elevenlabs.io](https://elevenlabs.io) → Profile → API Key |
-| `GROQ_API_KEY` | AI chat & translate | [console.groq.com](https://console.groq.com) → API Keys |
+### How to add variables in Railway
 
-4. Optional: `CORS_ORIGINS` – leave unset in production (defaults to allow all)
+1. Open your Railway project
+2. Click your **service** (PromptEditor)
+3. Go to the **Variables** tab (or **Settings** → **Variables**)
+4. Click **"+ New Variable"** or **"Add Variable"**
+5. Add each variable:
+
+| Variable | Value | Where to get it |
+|---------|-------|-----------------|
+| `ELEVENLABS_API_KEY` | Your ElevenLabs API key | [elevenlabs.io](https://elevenlabs.io) → Profile → API Key |
+| `GROQ_API_KEY` | Your Groq API key | [console.groq.com](https://console.groq.com) → API Keys → Create API Key |
+
+6. Click **Add** for each. Railway saves automatically.
+7. **Redeploy** after adding variables (Deployments → ⋮ → Redeploy)
+
+### Optional variables
+
+| Variable | Default | Use |
+|---------|---------|-----|
+| `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq model for chat/translate |
+| `CORS_ORIGINS` | `*` | Leave unset in production |
+
+### Getting your API keys
+
+- **ElevenLabs:** Sign up at [elevenlabs.io](https://elevenlabs.io) → Profile (top right) → API Key
+- **Groq:** Sign up at [console.groq.com](https://console.groq.com) → API Keys → Create API Key
 
 ---
 
