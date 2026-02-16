@@ -14,8 +14,12 @@
 2. Click **"New Project"**
 3. Select **"Deploy from GitHub repo"**
 4. Choose your repo: `mananawasthi-cmd/PromptEditor`
-5. **Important:** In Service → **Settings** → **Root Directory**, leave **empty** or set to `.` (repo root). If set to `frontend`, Railway will use Railpack and fail.
-6. Railway will detect the `Dockerfile` and start building
+5. **Critical – fix Railpack error:** Railway may default to Railpack and fail. Fix it:
+   - Go to your **Service** → **Settings**
+   - **Root Directory:** Must be **empty** (or `.`). If it shows `frontend`, clear it.
+   - **Builder:** If there's a Builder dropdown, select **Dockerfile**
+   - **Config file path** (optional): Set to `/railway.json` to force Dockerfile from repo root
+6. Click **Redeploy** after changing settings
 
 ---
 
