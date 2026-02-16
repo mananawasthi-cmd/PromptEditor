@@ -60,6 +60,12 @@
       </header>
       <div class="editor-write-area" ref="writeAreaRef" @scroll="onWriteAreaScroll">
         <div class="write-area-inner" ref="writeInnerRef">
+          <div ref="lineNumbersRef" class="line-numbers">
+            <div class="line-numbers-inner" :style="{ minHeight: lineNumbersHeight }">
+              <span v-for="n in lineCount" :key="n" class="line-num">{{ n }}</span>
+            </div>
+          </div>
+          <div class="editor-content-wrap">
           <textarea
             ref="textareaRef"
             v-model="content"
@@ -77,6 +83,7 @@
             @select="onSelectionChange"
             @scroll="onTextareaScroll"
           />
+          </div>
           <Transition name="tts-fade">
             <div v-if="selectedText && !quickEditOpen" class="tts-floating" :style="ttsPosition" role="toolbar">
             <button
@@ -226,6 +233,7 @@ const { setChatContext } = useChatContext()
 const title = ref('')
 const content = ref('')
 const textareaRef = ref(null)
+const lineNumbersRef = ref(null)
 const writeAreaRef = ref(null)
 const writeInnerRef = ref(null)
 const selectedText = ref('')
@@ -259,6 +267,17 @@ const wordCount = computed(() => {
   return text.split(/\s+/).filter(Boolean).length
 })
 
+const lineCount = computed(() => {
+  const lines = content.value.split('\n')
+  return Math.max(1, lines.length)
+})
+
+const lineNumbersHeight = computed(() => {
+  const lineHeight = 1.7
+  const lineHeightPx = 14 * lineHeight
+  return `${lineCount.value * lineHeightPx}px`
+})
+
 function onSelectionChange() {
   const el = textareaRef.value
   if (!el) return
@@ -278,6 +297,9 @@ function onWriteAreaScroll() {
 
 function onTextareaScroll() {
   if (selectedText.value) nextTick(updateTtsPosition)
+  const ta = textareaRef.value
+  const ln = lineNumbersRef.value
+  if (ta && ln) ln.scrollTop = ta.scrollTop
 }
 
 function updateTtsPosition() {
@@ -702,9 +724,9 @@ function emitSave() {
   position: relative;
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   min-height: 200px;
-  max-width: 680px;
+  max-width: 720px;
   margin: 0 auto;
   width: 100%;
   background: var(--bg-surface);
@@ -712,6 +734,38 @@ function emitSave() {
   border-radius: var(--radius-lg);
   overflow: visible;
   transition: border-color var(--transition);
+}
+
+.line-numbers {
+  flex-shrink: 0;
+  width: 40px;
+  padding: 20px 8px 20px 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  user-select: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  line-height: 1.7;
+}
+
+.line-numbers-inner {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.line-num {
+  display: block;
+  min-height: 1.7em;
+  padding-right: 4px;
+}
+
+.editor-content-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .write-area-inner:focus-within {
@@ -722,7 +776,7 @@ function emitSave() {
   flex: 1;
   width: 100%;
   min-height: 260px;
-  padding: 20px 24px;
+  padding: 20px 24px 20px 16px;
   background: transparent;
   border: none;
   color: var(--text-primary);

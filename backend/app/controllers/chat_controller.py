@@ -160,6 +160,9 @@ def translate():
     if not GROQ_API_KEY:
         return {"error": "GROQ_API_KEY not configured"}, 500
 
+    line_count = len(prompt_content.splitlines())
+    char_count = len(prompt_content)
+
     system_content = (
         f"Translate the following prompt/pitch to {target_language}. "
         "Use a casual, conversational tone - like everyday spoken language. "
@@ -170,6 +173,9 @@ def translate():
         "Variables include: {{name}}, {{company}}, {{customer}}, [PLACEHOLDER], ${{var}}, "
         "or any text in double curly braces {{ }}, square brackets [ ], or similar template syntax. "
         "ONLY translate the pitch/sales content - the actual spoken text. Variables stay unchanged.\n\n"
+        f"LENGTH CONSTRAINT: The original has {line_count} lines and ~{char_count} characters. "
+        "Your translation MUST have the SAME number of lines and similar character count (±15%). "
+        "Keep each line's length roughly similar. Do not add or remove lines.\n\n"
         "Output ONLY the translated text, nothing else."
     )
 

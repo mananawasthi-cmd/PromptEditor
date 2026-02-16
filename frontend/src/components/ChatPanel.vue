@@ -18,9 +18,9 @@
           </svg>
         </div>
         <h3>Edit prompts with AI</h3>
-        <p>Select text in the editor and click <strong>Edit</strong> (⌘K) to edit with AI, or use the button below to add the full prompt.</p>
+        <p>Select text and press <strong>⌘K</strong> to edit inline, or start a conversation about your entire prompt below.</p>
         <button class="btn-add-full" @click="addFullPromptToContext">
-          Add full prompt to chat
+          Use my prompt
         </button>
       </div>
 
@@ -167,7 +167,7 @@ async function send() {
   if (!finalCtx.promptContent && !finalCtx.selectedText) {
     messages.value.push({
       role: 'assistant',
-      content: 'Add your prompt first: select text and click Edit (⌘K), or click "Add full prompt to chat".',
+      content: 'Add your prompt first: select text and press ⌘K, or click "Use my prompt" to start.',
     })
     return
   }
