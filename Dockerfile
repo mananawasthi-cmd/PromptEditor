@@ -26,5 +26,5 @@ ENV FLASK_APP=run:app
 
 EXPOSE 5000
 
-# Railway injects PORT at runtime (default 8080)
-CMD gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 2 run:app
+# Railway injects PORT at runtime - MUST use it, not hardcoded port
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 2 run:app"]
