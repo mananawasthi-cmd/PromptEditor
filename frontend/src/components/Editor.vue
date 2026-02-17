@@ -27,36 +27,6 @@
           placeholder="Untitled prompt"
           @blur="emitSave"
         />
-        <div class="header-actions">
-          <select v-model="translateLang" class="lang-select">
-            <option value="Hindi">Hindi</option>
-            <option value="Tamil">Tamil</option>
-            <option value="Telugu">Telugu</option>
-            <option value="Marathi">Marathi</option>
-            <option value="Bengali">Bengali</option>
-            <option value="Kannada">Kannada</option>
-            <option value="Malayalam">Malayalam</option>
-            <option value="Punjabi">Punjabi</option>
-            <option value="Gujarati">Gujarati</option>
-            <option value="Odia">Odia</option>
-            <option value="Urdu">Urdu</option>
-          </select>
-          <button
-            class="btn-translate"
-            :disabled="!content.trim() || translateLoading"
-            title="Translate to selected language"
-            @click="doTranslate"
-          >
-            <span v-if="translateLoading" class="spinner-small" />
-            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M2 12h20" />
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-            Translate
-          </button>
-          <span v-if="translateError" class="translate-error">{{ translateError }}</span>
-        </div>
       </header>
       <div class="editor-write-area" ref="writeAreaRef" @scroll="onWriteAreaScroll">
         <div class="write-area-inner" ref="writeInnerRef">
@@ -190,10 +160,10 @@
               <div v-else-if="quickEditError" class="quick-edit-error">{{ quickEditError }}</div>
             </div>
           </Transition>
-          <div class="editor-stats">
-            <span>{{ wordCount }} words</span>
-            <span>{{ content.length }} characters</span>
-          </div>
+        </div>
+        <div class="editor-stats">
+          <span>{{ wordCount }} words</span>
+          <span>{{ content.length }} characters</span>
         </div>
       </div>
     </template>
@@ -204,7 +174,6 @@
 import { ref, watch, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { textToSpeech } from '../api/tts'
 import { streamChat } from '../api/chat'
-import { translatePrompt } from '../api/translate'
 import { useTtsSettings } from '../composables/useTtsSettings'
 import { useChatContext } from '../composables/useChatContext'
 
@@ -251,9 +220,6 @@ const quickEditLoading = ref(false)
 const quickEditInputRef = ref(null)
 const quickEditPosition = ref({ top: '0px', left: '0px' })
 
-const translateLang = ref('Hindi')
-const translateLoading = ref(false)
-const translateError = ref('')
 
 const latestAiResponse = computed(() => {
   if (quickEditStreaming.value) return quickEditStreaming.value
@@ -526,22 +492,6 @@ async function playTts() {
   }
 }
 
-async function doTranslate() {
-  const text = content.value.trim()
-  if (!text || translateLoading.value) return
-  translateLoading.value = true
-  try {
-    const translated = await translatePrompt(text, translateLang.value)
-    if (translated) content.value = translated
-    emitSave()
-  } catch (e) {
-    translateError.value = e.message || 'Translate failed'
-    setTimeout(() => { translateError.value = '' }, 4000)
-  } finally {
-    translateLoading.value = false
-  }
-}
-
 function emitSave() {
   if (!props.prompt) return
   const t = title.value.trim() || 'Untitled'
@@ -658,58 +608,6 @@ function emitSave() {
 
 .editor-title::placeholder {
   color: var(--text-muted);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lang-select {
-  padding: 6px 10px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: 12px;
-  outline: none;
-  cursor: pointer;
-}
-
-.btn-translate {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: var(--accent-muted);
-  color: var(--accent);
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition);
-}
-
-.btn-translate:hover:not(:disabled) {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-translate:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-translate svg {
-  width: 14px;
-  height: 14px;
-}
-
-.translate-error {
-  font-size: 11px;
-  color: #f87171;
 }
 
 .editor-write-area {
@@ -1074,10 +972,11 @@ function emitSave() {
 .editor-stats {
   display: flex;
   gap: 16px;
-  padding: 10px 20px;
+  padding: 10px 24px;
   font-size: 11px;
   color: var(--text-muted);
   background: var(--bg-elevated);
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
 }
 </style>

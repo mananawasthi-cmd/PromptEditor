@@ -47,7 +47,7 @@ Railway injects env vars into your backend at runtime. **Never commit API keys t
 
 | Variable | Default | Use |
 |---------|---------|-----|
-| `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq model for chat/translate |
+| `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq model for chat |
 | `CORS_ORIGINS` | `*` | Leave unset in production |
 
 ### Getting your API keys
@@ -69,7 +69,7 @@ Railway injects env vars into your backend at runtime. **Never commit API keys t
 
 1. Open the generated URL
 2. Log in with **AdminManan** / **Manan@123**
-3. Try: Edit prompts, Listen (TTS), Chat, Translate, Voice Chat
+3. Try: Edit prompts, Listen (TTS), Chat, Voice Chat
 
 ---
 
@@ -79,7 +79,7 @@ Railway injects env vars into your backend at runtime. **Never commit API keys t
 - Check the build logs in Railway
 - Ensure `Dockerfile` and `railway.json` are in the repo root
 
-### API errors (TTS, Chat, Translate)
+### API errors (TTS, Chat)
 - Verify `ELEVENLABS_API_KEY` and `GROQ_API_KEY` are set correctly
 - Check Railway logs: **Deployments** → select deployment → **View Logs**
 
