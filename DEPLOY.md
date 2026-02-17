@@ -79,6 +79,10 @@ Railway injects env vars into your backend at runtime. **Never commit API keys t
 - Check the build logs in Railway
 - Ensure `Dockerfile` and `railway.json` are in the repo root
 
+### 502 Connection Refused
+- **Remove custom target port**: In Railway → Settings → Networking → clear "Target port" (leave empty). Let Railway auto-detect from $PORT.
+- Ensure deployment succeeded and app started (check Deployments → View logs).
+
 ### API errors (TTS, Chat)
 - Verify `ELEVENLABS_API_KEY` and `GROQ_API_KEY` are set correctly
 - Check Railway logs: **Deployments** → select deployment → **View Logs**

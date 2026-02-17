@@ -23,6 +23,10 @@ def create_app():
     app.register_blueprint(tts_bp, url_prefix="/api")
     app.register_blueprint(chat_bp, url_prefix="/api")
 
+    @app.route("/health")
+    def health():
+        return {"status": "ok"}, 200
+
     # Serve frontend static files (production only, when static dir exists)
     static_dir = Path(__file__).resolve().parent.parent / "static"
     if static_dir.exists():

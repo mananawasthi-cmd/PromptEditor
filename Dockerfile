@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
 # Copy backend code
 COPY backend/ ./
+RUN chmod +x start.sh
 
 # Copy built frontend from stage 1
 COPY --from=frontend-build /app/frontend/dist ./static
@@ -26,5 +27,5 @@ ENV FLASK_APP=run:app
 
 EXPOSE 5000
 
-# Railway injects PORT at runtime - MUST use it, not hardcoded port
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 2 run:app"]
+# Railway injects PORT at runtime - MUST use it
+CMD ["./start.sh"]
