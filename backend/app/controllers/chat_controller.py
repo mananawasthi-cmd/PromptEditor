@@ -8,7 +8,8 @@ from groq import Groq
 chat_bp = Blueprint("chat", __name__)
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
+# llama-3.1-8b-instant: 500K TPD (free tier). llama-3.3-70b: 100K TPD.
+MODEL = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
 FALLBACK_MODEL = "llama-3.3-70b-versatile"
 
 
